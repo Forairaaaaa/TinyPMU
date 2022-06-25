@@ -19,15 +19,20 @@ class I2C_PORT {
     protected:
         /* Port interface */
         #ifdef ARDUINO
-        void    _I2C_init(TwoWire * wire, uint8_t dev_addr);
-        bool    _I2C_checkDevAvl();
+        void     _I2C_init(TwoWire * wire, uint8_t dev_addr);
+        bool     _I2C_checkDevAvl();
         #else
-        void    _I2C_init(uint8_t dev_addr);
-        void    _I2C_checkDevAvl();
+        void     _I2C_init(uint8_t dev_addr);
+        void     _I2C_checkDevAvl();
         #endif
-        void    _I2C_write1Byte(uint8_t addr, uint8_t data);
-        uint8_t _I2C_read8Bit(uint8_t addr);
-        void    _I2C_readBuff(uint8_t addr, int size, uint8_t buff[]);
+        void     _I2C_write1Byte(uint8_t addr, uint8_t data);
+        uint8_t  _I2C_read8Bit(uint8_t addr);
+        uint16_t _I2C_read12Bit(uint8_t addr);
+        uint16_t _I2C_read13Bit(uint8_t addr);
+        uint16_t _I2C_read16Bit(uint8_t addr);
+        uint32_t _I2C_read24Bit(uint8_t addr);
+        uint32_t _I2C_read32Bit(uint8_t addr);
+        void     _I2C_readBuff(uint8_t addr, int size, uint8_t buff[]);
 };
 
 #endif

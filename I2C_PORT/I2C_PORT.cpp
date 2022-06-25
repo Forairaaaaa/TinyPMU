@@ -28,6 +28,36 @@ uint8_t I2C_PORT::_I2C_read8Bit(uint8_t addr) {
     return _wire->read();
 }
 
+uint16_t I2C_PORT::_I2C_read12Bit(uint8_t addr) {
+    uint8_t buff[2];
+    _I2C_readBuff(addr, 2, buff);
+    return (buff[0] << 4) + buff[1];
+}
+
+uint16_t I2C_PORT::_I2C_read13Bit(uint8_t addr) {
+    uint8_t buff[2];
+    _I2C_readBuff(addr, 2, buff);
+    return (buff[0] << 5) + buff[1];
+}
+
+uint16_t I2C_PORT::_I2C_read16Bit(uint8_t addr) {
+    uint8_t buff[2];
+    _I2C_readBuff(addr, 2, buff);
+    return (buff[0] << 8) + buff[1];
+}
+
+uint32_t I2C_PORT::_I2C_read24Bit(uint8_t addr) {
+    uint8_t buff[4];
+    _I2C_readBuff(addr, 3, buff);
+    return (buff[0] << 16) + (buff[1] << 8) + buff[2];
+}
+
+uint32_t I2C_PORT::_I2C_read32Bit(uint8_t addr) {
+    uint8_t buff[4];
+    _I2C_readBuff(addr, 4, buff);
+    return (buff[0] << 24) + (buff[1] << 16) + (buff[2] << 8) + buff[3];
+}
+
 void I2C_PORT::_I2C_readBuff(uint8_t addr, int size, uint8_t buff[]) {
     _wire->beginTransmission(_dev_addr);
     _wire->write(addr);
