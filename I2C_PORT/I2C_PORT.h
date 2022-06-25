@@ -6,7 +6,10 @@
 #include "Wire.h"
 #endif
 
-/* I2C_PORT ABC */
+/* I2C device scan function */
+#define ENABLE_I2C_DEV_SCAN 0
+
+/* I2C_PORT base class */
 class I2C_PORT {
     private:
         uint8_t _dev_addr;
