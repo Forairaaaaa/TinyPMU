@@ -16,7 +16,6 @@ uint16_t AXP173::_getMid(uint16_t input, uint16_t min, uint16_t max) {
 
 
 /* Public functions */
-/* AXP173 init */
 #ifdef ARDUINO
 /**
  * @brief AXP173 init
@@ -34,8 +33,6 @@ void AXP173::begin() {
 }
 #endif
 
-
-/* Power info */
 bool AXP173::isACINExist() {
     return ( _I2C_read8Bit(0x00) & 0B10000000 ) ? true : false;
 }
@@ -58,7 +55,7 @@ bool AXP173::isVBUSAvl() {
  * @return true Bat charging
  * @return false Bat discharging
  */
-bool AXP173::getBatCDir() {
+bool AXP173::getBatCurrentDir() {
     return ( _I2C_read8Bit(0x00) & 0B00000100 ) ? true : false;
 }
 
@@ -139,8 +136,16 @@ void AXP173::setOutputVoltage(OUTPUT_CHANNEL channel, uint16_t voltage) {
             _I2C_write1Byte(0x23, buff);
             break;
         case LDO2:
+            voltage = (_getMid(voltage, 1800, 3300) - 1800) / 100;
+            buff = _I2C_read8Bit(0x28);
+            buff = (buff & 0B00001111) | (voltage << 4);
+            _I2C_write1Byte(0x28, buff);
             break;
         case LDO3:
+            voltage = (_getMid(voltage, 1800, 3300) - 1800) / 100;
+            buff = _I2C_read8Bit(0x28);
+            buff = (buff & 0B11110000) | (voltage);
+            _I2C_write1Byte(0x28, buff);
             break;
         case LDO4:
             voltage = (_getMid(voltage, 700, 3500) - 700) / 25;
@@ -152,3 +157,24 @@ void AXP173::setOutputVoltage(OUTPUT_CHANNEL channel, uint16_t voltage) {
             break;
     }
 }
+
+void AXP173::powerOFF() {
+    _I2C_write1Byte(0x32, (_I2C_read8Bit(0x32) | 0B10000000));
+}
+
+/**
+ * @brief Set charge enable or disable
+ * 
+ * @param state true:Enable, false:Disable
+ */
+void AXP173::setChargeEnable(bool state) {
+    if (state)
+        _I2C_write1Byte(0x33, ((_I2C_read8Bit(0x33) | 0B10000000)));
+    else
+        _I2C_write1Byte(0x33, ((_I2C_read8Bit(0x33) & 0B01111111)));
+}
+
+void AXP173::setChargeCurrent(CHARGE_CURRENT current) {
+    _I2C_write1Byte(0x33, ((_I2C_read8Bit(0x33) & 0B11110000) | current));
+}
+
