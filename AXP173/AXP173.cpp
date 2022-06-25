@@ -1,49 +1,19 @@
 #include "AXP173.h"
 
 
-/* Port interface */
-void AXP173::_I2C_init() {
-    #ifdef ARDUINO
-    #endif
-}
-
-void AXP173::_I2C_write1Byte(uint8_t addr, uint8_t data) {
-    #ifdef ARDUINO
-    _wire->beginTransmission(AXP173_ADDR);
-    _wire->write(addr);
-    _wire->write(data);
-    _wire->endTransmission();
-    #endif
-}
-
-uint8_t AXP173::_I2C_read8Bit(uint8_t addr) {
-    #ifdef ARDUINO
-    _wire->beginTransmission(AXP173_ADDR);
-    _wire->write(addr);
-    _wire->endTransmission();
-    _wire->requestFrom(AXP173_ADDR, 1);
-    return _wire->read();
-    #endif
-}
-
-void AXP173::_I2C_readBuff(uint8_t addr, uint8_t size, uint8_t buff[]) {
-    #ifdef ARDUINO
-    _wire->beginTransmission(AXP173_ADDR);
-    _wire->write(addr);
-    _wire->endTransmission();
-    _wire->requestFrom(AXP173_ADDR, (int)size);
-    for (int i = 0; i < size; i++) {
-        buff[i] = _wire->read();
-    }
-    #endif
-}
-
 
 /* AXP173 init */
 #ifdef ARDUINO
-void AXP173::begin(TwoWire * wire) {
-    _wire = wire;
+
+/*
+*   Ture:   Failed
+*   False:  Successful
+*/
+bool AXP173::begin(TwoWire * wire) {
+    _I2C_init(wire, AXP173_ADDR);
+    return _I2C_checkDevAvl();
 }
+
 #else
 void AXP173::begin() {
 }
