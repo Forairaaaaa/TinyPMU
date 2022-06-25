@@ -18,12 +18,15 @@
     
 AXP173 pmu;
 
+/* Init PMU */
 Wire.begin();
 pmu.begin(&Wire);
 
+/* Enable and set LDO voltage */
 pmu.setOutputEnable(AXP173::OP_LDO2, true);
 pmu.setOutputVoltage(AXP173::OP_LDO2, 2200);
 
+/* Get PMU info */
 Serial.println(pmu.getAXP173Temp());
 Serial.println(pmu.getBatLevel());
 
