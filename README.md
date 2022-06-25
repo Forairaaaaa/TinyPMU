@@ -1,14 +1,14 @@
 # TinyPMU
-##### 个人开源项目【TINY-PMU】系列电源管理模块的适配Arudino库
+#### 个人开源项目【TINY-PMU】系列电源管理模块的适配Arudino库
 
 - 已封装大部分常用电源操作方法：关机、LDO使能、电池状态等
 - 易移植：使用PORT基类用于硬件解耦
 
-##### 目前支持：
+#### 目前支持：
 
 - [【TINY-PMU-AXP173】](https://github.com/Forairaaaaa/TINY-PMU-AXP173)
 
-##### 示例：
+#### 示例：
 
 ```cpp
 #include "Wire.h"
@@ -30,8 +30,8 @@ Serial.println(pmu.getBatLevel());
 ...
 ```
 
-##### 参考链接：
+#### 参考链接：
 
-- [](http://www.x-powers.com/index.php/Info/product_detail/article_id/27)
-- [](https://github.com/m5stack/M5Core2)
+- [www.x-powers.com](http://www.x-powers.com/index.php/Info/product_detail/article_id/27)
+- [m5stack/M5Core2](https://github.com/m5stack/M5Core2)
 
