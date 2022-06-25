@@ -4,7 +4,7 @@
 - 已封装大部分常用电源操作方法：关机、LDO使能、电池状态等
 - 易移植：使用PORT基类用于硬件解耦
 
-#### 目前支持：
+#### 目前支持模块：
 
 - [【TINY-PMU-AXP173】](https://github.com/Forairaaaaa/TINY-PMU-AXP173)
 
