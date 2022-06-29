@@ -1,7 +1,7 @@
 #ifndef _AXP173_H_
 #define _AXP173_H_
 
-#include "../I2C_PORT/I2C_PORT.h"
+#include "../../HARDWARE-PORT/HARDWARE_PORT.h"
 
 
 /* AXP173 device address */
