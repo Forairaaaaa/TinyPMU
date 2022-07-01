@@ -8,6 +8,10 @@
 
 - [【TINY-PMU-AXP173】](https://github.com/Forairaaaaa/TINY-PMU-AXP173)
 
+#### 依赖库：
+
+- [Forairaaaaa/HARDWARE-PORT: 硬件外设封装基类，方便移植 (github.com)](https://github.com/Forairaaaaa/HARDWARE-PORT)
+
 #### 示例：
 
 ```cpp
