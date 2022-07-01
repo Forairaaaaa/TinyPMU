@@ -8,6 +8,10 @@
 
 - [【TINY-PMU-AXP173】](https://github.com/Forairaaaaa/TINY-PMU-AXP173)
 
+#### 依赖库：
+
+- https://github.com/Forairaaaaa/TinyPMU.git
+
 #### 示例：
 
 ```cpp
