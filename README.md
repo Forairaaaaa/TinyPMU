@@ -10,7 +10,7 @@
 
 #### 依赖库：
 
-- https://github.com/Forairaaaaa/TinyPMU.git
+- [Forairaaaaa/HARDWARE-PORT: 硬件外设封装基类，方便移植 (github.com)](https://github.com/Forairaaaaa/HARDWARE-PORT)
 
 #### 示例：
 
