@@ -95,6 +95,10 @@ class AXP2101 : public I2C_PORT {
         /* Temperature data */
         float getAXP173Temp();
         float getTSTemp();
+        
+        void coreS3_init();
+        void coreS3_AW9523_init();
+        void coreS3_VBUS_boost(bool state);
 };      
 
 #endif
