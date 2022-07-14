@@ -103,6 +103,9 @@ void AXP2101::setOutputEnable(OUTPUT_CHANNEL channel, bool state) {
     }
 }
 
+
+
+
 /**
  * @brief Set channels' output voltage
  * 
@@ -255,4 +258,114 @@ float AXP2101::getTSTemp() {
     const float OFFSET_DEG_C = -144.7;
     uint16_t ReData = _I2C_read12Bit(0x62);
     return OFFSET_DEG_C + ReData * ADCLSB;
+}
+
+
+
+void __I2C_write1Byte(uint8_t dev_addr, uint8_t addr, uint8_t data) {
+    Wire.beginTransmission(dev_addr);
+    Wire.write(addr);
+    Wire.write(data);
+    Wire.endTransmission();
+}
+
+
+void AXP2101::coreS3_init() {
+    // ALDO2 set to 3.3v  
+    _I2C_write1Byte(0x93, 28);
+    // ALDO1 set to 1.8v  (0.5 + 100*13)
+    _I2C_write1Byte(0x92, 12);
+
+    // ALDO3 set to 3.3v 
+    _I2C_write1Byte(0x94, 28);
+    // ALDO4 set to 3.3v
+    _I2C_write1Byte(0x95, 28);
+}
+
+
+void AXP2101::coreS3_AW9523_init() {
+    /* Copy from lovyan */
+    // m5gfx::i2c::writeRegister8(i2c_port, aw9523_i2c_addr, AW9523_REG_CONFIG0, 0b01111000);
+    // m5gfx::i2c::writeRegister8(i2c_port, aw9523_i2c_addr, AW9523_REG_CONFIG1, 0b01011000);
+    // m5gfx::i2c::writeRegister8(i2c_port, aw9523_i2c_addr, AW9523_REG_LEDMODE0, 0b11111110);
+    // m5gfx::i2c::writeRegister8(i2c_port, aw9523_i2c_addr, AW9523_REG_LEDMODE1, 0b11111000);
+    // m5gfx::i2c::writeRegister8(i2c_port, aw9523_i2c_addr, AW9523_REG_GCR,(1 << 4));
+
+    __I2C_write1Byte(0x58, 0x04, 0b01111000);
+    __I2C_write1Byte(0x58, 0x05, 0b01011000);
+    __I2C_write1Byte(0x58, 0x12, 0b11111110);
+    __I2C_write1Byte(0x58, 0x13, 0b11111000);
+    __I2C_write1Byte(0x58, 0x11, (1 << 4));
+
+    // m5gfx::i2c::writeRegister8(i2c_port, aw9523_i2c_addr, 0x02, 0b00000110);
+    // m5gfx::i2c::writeRegister8(i2c_port, aw9523_i2c_addr, 0x03, 0b10100000);
+
+
+
+    /* Pull up p0_1 p0_2 */
+    // _I2C_write1Byte(0x58, 0x02, 0b00000110);
+    /* Pull up p1_7 p1_5 */
+    __I2C_write1Byte(0x58, 0x03, 0b10100000);
+
+    /* Pull down p0_1 */
+    __I2C_write1Byte(0x58, 0x02, 0b00000100);
+}
+
+
+/**
+ * @brief vbus boost state setup
+ * 
+ * @param state Ture:Enable
+ */
+void AXP2101::coreS3_VBUS_boost(bool state) {
+    uint8_t buff;
+    if (state) {
+        // 1
+        _I2C_write1Byte(0xF0, 0x06);
+        // 2
+        buff = _I2C_read8Bit(0xF1);
+        buff = buff | (1U << 2);
+        _I2C_write1Byte(0xF1, buff);
+        // 3
+        _I2C_write1Byte(0xFF, 0x01);
+        // 4
+        _I2C_write1Byte(0x20, 0x01);
+        // 5
+        _I2C_write1Byte(0xFF, 0x00);
+        // 6
+        buff = _I2C_read8Bit(0xF1);
+        buff = buff & ~(1U << 2);
+        _I2C_write1Byte(0xF1, buff);
+        // 7
+        _I2C_write1Byte(0xF0, 0x00);
+
+        // enable boost
+        __I2C_write1Byte(0x58, 0x02, 0b00000110);
+
+
+
+
+    } else {
+        // disable boost
+        __I2C_write1Byte(0x58, 0x02, 0b00000100);
+
+        // 1
+        _I2C_write1Byte(0xF0, 0x06);
+        // 2
+        buff = _I2C_read8Bit(0xF1);
+        buff = buff | (1U << 2);
+        _I2C_write1Byte(0xF1, buff);
+        // 3
+        _I2C_write1Byte(0xFF, 0x01);
+        // 4
+        _I2C_write1Byte(0x20, 0x00);
+        // 5
+        _I2C_write1Byte(0xFF, 0x00);
+        // 6
+        buff = _I2C_read8Bit(0xF1);
+        buff = buff & ~(1U << 2);
+        _I2C_write1Byte(0xF1, buff);
+        // 7
+        _I2C_write1Byte(0xF0, 0x00);
+    }
 }
